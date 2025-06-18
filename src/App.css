@@ -87,8 +87,17 @@
   margin-block-end: 2vh;
 }
 .task {
-  color: #ffffff;
   font-size: 2.5vh;
+  cursor: pointer;
+}
+
+.completed {
+  color: #c8c8c8; 
+  text-decoration: line-through; 
+}
+
+.incompleted {
+  color: #ffffff;
 }
 .actions {
   display: flex;

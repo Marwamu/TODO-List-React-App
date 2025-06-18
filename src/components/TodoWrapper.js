@@ -3,7 +3,6 @@ import TodoForm from "./TodoForm";
 import EditTodoForm from "./EditTodoForm";
 import Todo from "./Todo";
 import { v4 as uuidv4 } from "uuid";
-// import { isEditable } from '@testing-library/user-event/dist/utils';
 
 const TodoWrapper = () => {
   const [todos, setTodos] = useState([]);
@@ -12,13 +11,42 @@ const TodoWrapper = () => {
   const addTodo = (todo) => {
     setTodos([
       ...todos,
-      { id: uuidv4(), task: todo, completed: false, isEditing: false },
+      { id: uuidv4(), task: todo, completed: false, isEditing: true },
     ]);
   };
 
   //Delete Todo
 
   const deleteTodo = (id) => {setTodos(todos.filter((todo) => todo.id !== id))};
+
+  // Toggle Complete Todo
+  const toggleComplete = (obj) => {
+    setTodos(
+      todos.map((todo)=> todo.id === obj.id ? {
+        ...todo, completed: ! obj.completed
+      } : todo)
+    )
+  }
+
+
+  //Edit Todo
+
+  const editTodo = (obj) => {
+    setTodos(
+      todos.map((todo) =>
+        todo.id === obj.id ? { ...todo, isEditable: ! obj.isEditable} 
+       : todo)
+    )
+  }
+
+  // Edit Task todo
+  const editTask = (task, id) =>{
+setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, task, isEditable:!todo.isEditable} 
+       : todo)
+    )
+  }
 
   console.log("todo", todos);
   return (
@@ -27,16 +55,18 @@ const TodoWrapper = () => {
       <TodoForm addTodo={addTodo} />
 
       {todos.map((todo) =>
-        todo.isEditing ? (
-          <EditTodoForm />
+        todo.isEditable ? (
+          <EditTodoForm 
+           editTodo={editTask}
+           todo={todo} 
+            />
         ) : (
           <Todo
-            // key={todo.id}
-            id={todo.id}
-            task={todo.task}
+            key={todo.id}
+            todo={todo}
             deleteTodo={deleteTodo}
-            // editTodo={editTodo}
-            // toggleComplete={toggleComplete}
+            editTodo={editTodo}
+            toggleComplete={toggleComplete}
           />
         )
       )}
